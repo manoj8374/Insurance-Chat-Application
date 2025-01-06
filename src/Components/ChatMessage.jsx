@@ -35,9 +35,7 @@ const ChatMessage = ({ message, isUser }) => {
       <Avatar $isUser={isUser}>
         {isUser ? 'U' : 'B'}
       </Avatar>
-      <MessageBubble $isUser={isUser}>
-        {message}
-      </MessageBubble>
+      <MessageBubble $isUser={isUser} dangerouslySetInnerHTML={{ __html: message }}/>
     </MessageContainer>
   );
 };

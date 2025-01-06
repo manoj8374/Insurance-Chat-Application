@@ -38,6 +38,24 @@ const WelcomeMessage = styled.div`
   margin: 24px 0;
 `;
 
+// Prepare the message for rendering
+const getBotMessage = (response) => {
+  // Extract answer and points
+  let message = response.answer;
+
+  // Check if there are points and format them accordingly
+  if (response.points && response.points.length > 0) {
+    const pointsList = response.points.map(point => {
+      return `<strong>${point.title}:</strong> ${point.description}`;
+    }).join('<br/>');
+    
+    // Combine the message with the list of points
+    message += `<br/><br/>${pointsList}`;
+  }
+
+  return message;
+};
+
 function App() {
   const [messages, setMessages] = useState([
     { text: "Hello! I'm your friendly chatbot. How can I help you today?", isUser: false }
@@ -58,27 +76,17 @@ function App() {
         "ChatHistory": latestMessages
       })
     }
-    const res = await fetch('http://192.168.0.110:8000/items', options)
+    const res = await fetch('http://192.168.119.1:8000/items', options)
     const data = await res.json()
-    console.log(data)
-    
-    const botResponse = data["Answer"];
-    
-    setMessages(prev => [...prev, { text: botResponse, isUser: false }]);
-    setIsTyping(false);
-  };
 
-  const getBotResponse = (message) => {
-    const lowerMessage = message.toLowerCase();
-    if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
-      return 'Hello! Nice to meet you!';
-    } else if (lowerMessage.includes('how are you')) {
-      return "I'm doing great, thanks for asking! How about you?";
-    } else if (lowerMessage.includes('bye')) {
-      return 'Goodbye! Have a great day!';
-    } else {
-      return "I'm still learning! Could you try asking something else?";
-    }
+    const text = JSON.stringify(data["Answer"]);
+    console.log(text)
+    console.log(data["Answer"])
+  
+    const botMessage = getBotMessage(data["Answer"]);
+    
+    setMessages(prev => [...prev, { text: botMessage, isUser: false }]);
+    setIsTyping(false);
   };
 
   return (
