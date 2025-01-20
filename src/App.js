@@ -76,7 +76,7 @@ function App() {
         "ChatHistory": latestMessages
       })
     }
-    const res = await fetch('http://192.168.119.1:8000/items', options)
+    const res = await fetch('http://10.17.85.17:8000/items', options)
     const data = await res.json()
 
     const text = JSON.stringify(data["Answer"]);
